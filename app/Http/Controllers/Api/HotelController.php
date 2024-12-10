@@ -26,7 +26,7 @@ class HotelController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/hotel",
+     *     path="/api/hoteles",
      *     summary="Obtener lista de hoteles paginada con filtros dinámicos",
      *     tags={"Hotel"},
      *     @OA\Parameter(
@@ -121,7 +121,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/hotel/all",
+     *     path="/api/hoteles/all",
      *     summary="Obtener todos los hoteles",
      *     tags={"Hotel"},
      *     @OA\Response(response=200, description="Lista de todos los hoteles")
@@ -134,7 +134,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/hotel",
+     *     path="/api/hoteles",
      *     summary="Crear un nuevo hotel",
      *     tags={"Hotel"},
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/StoreHotelRequest")),
@@ -158,7 +158,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/hotel/{hotel}",
+     *     path="/api/hoteles/{hotel}",
      *     summary="Obtener detalles de un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -205,7 +205,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/hotel/{hotel}",
+     *     path="/api/hoteles/{hotel}",
      *     summary="Actualizar un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -214,7 +214,7 @@ class HotelController extends Controller
      *     @OA\Response(response=404, description="Hotel no encontrado")
      * )
      * @OA\Patch(
-     *     path="/api/hotel/{hotel}",
+     *     path="/api/hoteles/{hotel}",
      *     summary="Actualizar parcialmente un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -241,7 +241,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/hotel/{hotel}",
+     *     path="/api/hoteles/{hotel}",
      *     summary="Eliminar un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -267,7 +267,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/hotel/{hotel}/habitaciones",
+     *     path="/api/hoteles/{hotel}/habitaciones",
      *     summary="Obtener las habitaciones de un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -292,7 +292,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/hotel/{hotel}/servicio/{servicio}",
+     *     path="/api/hoteles/{hotel}/servicio/{servicio}",
      *     summary="Asociar un servicio a un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -326,7 +326,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/hotel/{hotel}/servicio/{servicio}",
+     *     path="/api/hoteles/{hotel}/servicio/{servicio}",
      *     summary="Desasociar un servicio de un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -359,7 +359,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/hotel/{hotel}/servicios",
+     *     path="/api/hoteles/{hotel}/servicios",
      *     summary="Obtener los servicios de un hotel",
      *     tags={"Hotel"},
      *     @OA\Parameter(name="hotel", in="path", required=true, @OA\Schema(type="integer")),
@@ -383,7 +383,7 @@ class HotelController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/hotel/cascada",
+     *     path="/api/hoteles/cascada",
      *     summary="Crear un hotel con habitaciones y servicios en cascada",
      *     tags={"Hotel"},
      *     @OA\RequestBody(
