@@ -1,0 +1,691 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Gestion Hoteles",
+        "description": "desciption",
+        "version": "1.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/"
+        }
+    ],
+    "paths": {
+        "/api/hotel": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Obtener lista de hoteles paginada con filtros dinámicos",
+                "operationId": "42e38e1ec9a77688ed78f16868c19a31",
+                "parameters": [
+                    {
+                        "name": "nombre",
+                        "in": "query",
+                        "description": "Nombre del hotel para filtrar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direccion",
+                        "in": "query",
+                        "description": "Dirección del hotel para filtrar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "telefono",
+                        "in": "query",
+                        "description": "Teléfono del hotel para filtrar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email del hotel para filtrar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sitioWeb",
+                        "in": "query",
+                        "description": "Sitio web del hotel para filtrar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Cantidad de elementos por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "includeHabitaciones",
+                        "in": "query",
+                        "description": "Inluye el numero de habitaciones",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de hoteles filtrada y paginada"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Crear un nuevo hotel",
+                "operationId": "e4cd0a9fd83fe69e1de0b7278c89a329",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreHotelRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hotel creado correctamente"
+                    }
+                }
+            }
+        },
+        "/api/hotel/all": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Obtener todos los hoteles",
+                "operationId": "2789ef3737c6b76055637bf1cdb63257",
+                "responses": {
+                    "200": {
+                        "description": "Lista de todos los hoteles"
+                    }
+                }
+            }
+        },
+        "/api/hotel/{hotel}": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Obtener detalles de un hotel",
+                "operationId": "b03182417b6160fa22c808080b9057ae",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "includeHabitaciones",
+                        "in": "query",
+                        "description": "Inluye las habitaciones del hotel",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeServicios",
+                        "in": "query",
+                        "description": "Inluye los servicios del hotel",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del hotel"
+                    },
+                    "404": {
+                        "description": "Hotel no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Actualizar un hotel",
+                "operationId": "19009aa79ddf6626ff887cbd39f256d4",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PutHotelRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hotel actualizado correctamente"
+                    },
+                    "404": {
+                        "description": "Hotel no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Eliminar un hotel",
+                "operationId": "80235fddf92cc0a664fbc830a5880b5d",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hotel eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Hotel no encontrado"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Actualizar parcialmente un hotel",
+                "operationId": "f93244d5e381ffbb4c48bf5647a8db71",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PutHotelRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hotel actualizado correctamente"
+                    },
+                    "404": {
+                        "description": "Hotel no encontrado"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Hotel": {
+                "title": "Hotel",
+                "description": "Modelo de un hotel",
+                "required": [
+                    "nombre",
+                    "direccion"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del hotel",
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "description": "Nombre del hotel",
+                        "type": "string"
+                    },
+                    "direccion": {
+                        "description": "Dirección del hotel",
+                        "type": "string"
+                    },
+                    "telefono": {
+                        "description": "Teléfono de contacto del hotel",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Correo electrónico del hotel",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "sitioWeb": {
+                        "description": "Sitio web del hotel",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreHotelRequest": {
+                "title": "Store Hotel Request",
+                "description": "Datos requeridos para crear un nuevo hotel",
+                "required": [
+                    "nombre",
+                    "direccion",
+                    "telefono",
+                    "email",
+                    "sitioWeb"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del hotel (mínimo 5 caracteres, máximo 50)",
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 5
+                    },
+                    "direccion": {
+                        "description": "Dirección del hotel (mínimo 5 caracteres, máximo 100)",
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 5
+                    },
+                    "telefono": {
+                        "description": "Teléfono del hotel (máximo 20 caracteres)",
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "email": {
+                        "description": "Correo electrónico del hotel (mínimo 5 caracteres)",
+                        "type": "string",
+                        "format": "email",
+                        "minLength": 5
+                    },
+                    "sitioWeb": {
+                        "description": "Sitio web del hotel (mínimo 5 caracteres)",
+                        "type": "string",
+                        "minLength": 5
+                    }
+                },
+                "type": "object"
+            },
+            "PutHotelRequest": {
+                "title": "Put Hotel Request",
+                "description": "Datos requeridos para crear un nuevo hotel",
+                "required": [
+                    "nombre",
+                    "direccion",
+                    "telefono",
+                    "email",
+                    "sitioWeb"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del hotel (mínimo 5 caracteres, máximo 50)",
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 5
+                    },
+                    "direccion": {
+                        "description": "Dirección del hotel (mínimo 5 caracteres, máximo 100)",
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 5
+                    },
+                    "telefono": {
+                        "description": "Teléfono del hotel (máximo 20 caracteres)",
+                        "type": "string",
+                        "maxLength": 20
+                    },
+                    "email": {
+                        "description": "Correo electrónico del hotel (mínimo 5 caracteres)",
+                        "type": "string",
+                        "format": "email",
+                        "minLength": 5
+                    },
+                    "sitioWeb": {
+                        "description": "Sitio web del hotel (mínimo 5 caracteres)",
+                        "type": "string",
+                        "minLength": 5
+                    }
+                },
+                "type": "object"
+            },
+            "Habitacion": {
+                "title": "Habitación",
+                "description": "Modelo de una habitación",
+                "required": [
+                    "numero",
+                    "tipo",
+                    "precioNoche",
+                    "hotel_id"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID de la habitación",
+                        "type": "integer"
+                    },
+                    "numero": {
+                        "description": "Número de la habitación",
+                        "type": "string"
+                    },
+                    "tipo": {
+                        "description": "Tipo de habitación (ej. individual, doble)",
+                        "type": "string"
+                    },
+                    "precioNoche": {
+                        "description": "Precio por noche de la habitación",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "hotel_id": {
+                        "description": "ID del hotel al que pertenece la habitación",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreHabitacionRequest": {
+                "title": "Store Habitación Request",
+                "description": "Datos requeridos para crear una nueva habitación",
+                "required": [
+                    "numero",
+                    "tipo",
+                    "precioNoche",
+                    "hotel_id"
+                ],
+                "properties": {
+                    "numero": {
+                        "description": "Número de la habitación",
+                        "type": "string",
+                        "maxLength": 10
+                    },
+                    "tipo": {
+                        "description": "Tipo de habitación",
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 5
+                    },
+                    "precioNoche": {
+                        "description": "Precio por noche",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "hotel_id": {
+                        "description": "ID del hotel al que pertenece",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "PutHabitacionRequest": {
+                "title": "Put Habitación Request",
+                "description": "Datos requeridos para actualizar una habitación",
+                "required": [
+                    "numero",
+                    "tipo",
+                    "precioNoche",
+                    "hotel_id"
+                ],
+                "properties": {
+                    "numero": {
+                        "description": "Número de la habitación",
+                        "type": "string",
+                        "maxLength": 10
+                    },
+                    "tipo": {
+                        "description": "Tipo de habitación",
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 5
+                    },
+                    "precioNoche": {
+                        "description": "Precio por noche",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "hotel_id": {
+                        "description": "ID del hotel al que pertenece",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Huesped": {
+                "title": "Huesped",
+                "description": "Modelo de un huésped",
+                "required": [
+                    "nombre",
+                    "apellido",
+                    "dniPasaporte"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del huésped",
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "description": "Nombre del huésped",
+                        "type": "string"
+                    },
+                    "apellido": {
+                        "description": "Apellido del huésped",
+                        "type": "string"
+                    },
+                    "dniPasaporte": {
+                        "description": "DNI o pasaporte del huésped",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreHuespedRequest": {
+                "title": "Store Huesped Request",
+                "description": "Datos requeridos para crear un nuevo huésped",
+                "required": [
+                    "nombre",
+                    "apellido",
+                    "dniPasaporte"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del huésped",
+                        "type": "string"
+                    },
+                    "apellido": {
+                        "description": "Apellido del huésped",
+                        "type": "string"
+                    },
+                    "dniPasaporte": {
+                        "description": "DNI o pasaporte del huésped",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PutHuespedRequest": {
+                "title": "Put Huesped Request",
+                "description": "Datos requeridos para actualizar un huésped",
+                "required": [
+                    "nombre",
+                    "apellido",
+                    "dniPasaporte"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del huésped",
+                        "type": "string"
+                    },
+                    "apellido": {
+                        "description": "Apellido del huésped",
+                        "type": "string"
+                    },
+                    "dniPasaporte": {
+                        "description": "DNI o pasaporte del huésped",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Servicio": {
+                "title": "Servicio",
+                "description": "Modelo de un servicio",
+                "required": [
+                    "nombre",
+                    "descripcion",
+                    "categoria"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del servicio",
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "description": "Nombre del servicio",
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "description": "Descripción del servicio",
+                        "type": "string"
+                    },
+                    "categoria": {
+                        "description": "Categoría del servicio",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreServicioRequest": {
+                "title": "Store Servicio Request",
+                "description": "Datos requeridos para crear un nuevo servicio",
+                "required": [
+                    "nombre",
+                    "descripcion",
+                    "categoria"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del servicio",
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "description": "Descripción del servicio",
+                        "type": "string"
+                    },
+                    "categoria": {
+                        "description": "Categoría del servicio",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PutServicioRequest": {
+                "title": "Put Servicio Request",
+                "description": "Datos requeridos para actualizar un servicio",
+                "required": [
+                    "nombre",
+                    "descripcion",
+                    "categoria"
+                ],
+                "properties": {
+                    "nombre": {
+                        "description": "Nombre del servicio",
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "description": "Descripción del servicio",
+                        "type": "string"
+                    },
+                    "categoria": {
+                        "description": "Categoría del servicio",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Hotel",
+            "description": "Hotel"
+        }
+    ]
+}
