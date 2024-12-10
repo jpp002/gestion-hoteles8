@@ -74,7 +74,13 @@ class HotelController extends Controller
      *      @OA\Parameter(
      *         name="includeHabitaciones",
      *         in="query",
-     *         description="Inluye el numero de habitaciones",
+     *         description="Inluye las habitaciones que tiene el hotel?",
+     *         @OA\Schema(type="boolean")
+     *     ),
+     *      @OA\Parameter(
+     *         name="includeServicios",
+     *         in="query",
+     *         description="Inluye los servicios que tiene el hotel?",
      *         @OA\Schema(type="boolean")
      *     ),
      *     @OA\Response(response=200, description="Lista de hoteles filtrada y paginada")
@@ -274,21 +280,21 @@ class HotelController extends Controller
      *     @OA\Response(response=200, description="Lista de habitaciones")
      * )
      */
-    // public function habitaciones($idHotel)
-    // {
-    //     $hotel = Hotel::find($idHotel);
-    //     if (!$hotel) {
-    //         throw new HotelNotFoundException($idHotel);
-    //     }
+    public function habitaciones($idHotel)
+    {
+        $hotel = Hotel::find($idHotel);
+        if (!$hotel) {
+            throw new HotelNotFoundException($idHotel);
+        }
 
-    //     $habitaciones = $hotel->habitaciones;
+        $habitaciones = $hotel->habitaciones;
 
-    //     if ($habitaciones->isEmpty()) {
-    //         return response()->json(["message" => "Este hotel no tiene habitaciones"], 404);
-    //     }
+        if ($habitaciones->isEmpty()) {
+            return response()->json(["message" => "Este hotel no tiene habitaciones"], 404);
+        }
 
-    //     return response()->json($habitaciones, 200);
-    // }
+        return response()->json($habitaciones, 200);
+    }
 
     /**
      * @OA\Post(
@@ -301,26 +307,26 @@ class HotelController extends Controller
      *     @OA\Response(response=400, description="Error en la asociación")
      * )
      */
-    // public function addServicio($idHotel, $idServicio)
-    // {
-    //     $hotel = Hotel::find($idHotel);
-    //     if (!$hotel) {
-    //         throw new HotelNotFoundException($idHotel);
-    //     }
+    public function addServicio($idHotel, $idServicio)
+    {
+        $hotel = Hotel::find($idHotel);
+        if (!$hotel) {
+            throw new HotelNotFoundException($idHotel);
+        }
 
-    //     $servicio = servicio::find($idServicio);
-    //     if (!$servicio) {
-    //         throw new ServicioNotFoundException($idServicio);
-    //     }
+        $servicio = servicio::find($idServicio);
+        if (!$servicio) {
+            throw new ServicioNotFoundException($idServicio);
+        }
 
-    //     if ($hotel->servicios->contains($servicio->id)) {
-    //         return response()->json(['message' => 'El servicio ya está asociado a este hotel'], 400);
-    //     }
+        if ($hotel->servicios->contains($servicio->id)) {
+            return response()->json(['message' => 'El servicio ya está asociado a este hotel'], 400);
+        }
 
-    //     $hotel->servicios()->attach($servicio->id);
+        $hotel->servicios()->attach($servicio->id);
 
-    //     return response()->json(['message' => 'Servicio asociado correctamente'], 200);
-    // }
+        return response()->json(['message' => 'Servicio asociado correctamente'], 200);
+    }
 
 
 
@@ -335,27 +341,27 @@ class HotelController extends Controller
      *     @OA\Response(response=400, description="Error en la desasociación")
      * )
      */
-    // public function removeServicio($idHotel, $idServicio)
-    // {
-    //     $hotel = Hotel::find($idHotel);
-    //     if (!$hotel) {
-    //         throw new HotelNotFoundException($idHotel);
-    //     }
+    public function removeServicio($idHotel, $idServicio)
+    {
+        $hotel = Hotel::find($idHotel);
+        if (!$hotel) {
+            throw new HotelNotFoundException($idHotel);
+        }
 
-    //     $servicio = servicio::find($idServicio);
-    //     if (!$servicio) {
-    //         throw new ServicioNotFoundException($idServicio);
-    //     }
+        $servicio = servicio::find($idServicio);
+        if (!$servicio) {
+            throw new ServicioNotFoundException($idServicio);
+        }
 
 
-    //     if (!$hotel->servicios->contains($servicio->id)) {
-    //         return response()->json(['message' => 'El servicio no está asociado a este hotel'], 400);
-    //     }
+        if (!$hotel->servicios->contains($servicio->id)) {
+            return response()->json(['message' => 'El servicio no está asociado a este hotel'], 400);
+        }
 
-    //     $hotel->servicios()->detach($servicio->id);
+        $hotel->servicios()->detach($servicio->id);
 
-    //     return response()->json(['message' => 'Servicio desasociado correctamente'], 200);
-    // }
+        return response()->json(['message' => 'Servicio desasociado correctamente'], 200);
+    }
 
     /**
      * @OA\Get(
@@ -366,20 +372,20 @@ class HotelController extends Controller
      *     @OA\Response(response=200, description="Lista de servicios")
      * )
      */
-    // public function servicios($idHotel)
-    // {
-    //     $hotel = Hotel::find($idHotel);
-    //     if (!$hotel) {
-    //         throw new HotelNotFoundException($idHotel);
-    //     }
+    public function servicios($idHotel)
+    {
+        $hotel = Hotel::find($idHotel);
+        if (!$hotel) {
+            throw new HotelNotFoundException($idHotel);
+        }
 
-    //     $servicios = $hotel->servicios;
+        $servicios = $hotel->servicios;
 
-    //     if ($servicios->isEmpty()) {
-    //         return response()->json(["message" => "Este hotel no tiene servicios"], 404);
-    //     }
-    //     return response()->json($servicios, 200);
-    // }
+        if ($servicios->isEmpty()) {
+            return response()->json(["message" => "Este hotel no tiene servicios"], 404);
+        }
+        return response()->json($servicios, 200);
+    }
 
     /**
      * @OA\Post(
@@ -420,7 +426,7 @@ class HotelController extends Controller
      *     @OA\Response(response=400, description="Error en los datos enviados")
      * )
      */
-    /*
+    
     public function cascada(StoreCascadaRequest $request)
     {
         $data = $request->validated();
@@ -466,5 +472,5 @@ class HotelController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'Error al crear el hotel: ' . $e->getMessage()], 400);
         }
-    }*/
+    }
 }

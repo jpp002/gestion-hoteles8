@@ -115,6 +115,126 @@
                 }
             }
         },
+        "/api/habitaciones/bulk": {
+            "post": {
+                "tags": [
+                    "Habitación"
+                ],
+                "summary": "Crear múltiples habitaciones en batch",
+                "operationId": "8cd0f6462ee6679d12bd8e381998edb0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "habitaciones"
+                                ],
+                                "properties": {
+                                    "habitaciones": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "hotel_id": {
+                                                    "description": "ID del hotel al que pertenece la habitación",
+                                                    "type": "integer"
+                                                },
+                                                "numero": {
+                                                    "description": "Número de la habitación",
+                                                    "type": "string"
+                                                },
+                                                "tipo": {
+                                                    "description": "Tipo de habitación (individual, doble, suite)",
+                                                    "type": "string"
+                                                },
+                                                "precioNoche": {
+                                                    "description": "Precio por noche de la habitación",
+                                                    "type": "number",
+                                                    "format": "float"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Habitaciones creadas correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Habitaciones creadas correctamente"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "hotel_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "numero": {
+                                                        "type": "string"
+                                                    },
+                                                    "tipo": {
+                                                        "type": "string"
+                                                    },
+                                                    "precioNoche": {
+                                                        "type": "number",
+                                                        "format": "float"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Si los datos no son válidos o falta información",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Datos inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Hotel no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Hotel con ID {hotel_id} no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/habitaciones/{habitacion}": {
             "get": {
                 "tags": [
@@ -358,7 +478,15 @@
                     {
                         "name": "includeHabitaciones",
                         "in": "query",
-                        "description": "Inluye el numero de habitaciones",
+                        "description": "Inluye las habitaciones que tiene el hotel?",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeServicios",
+                        "in": "query",
+                        "description": "Inluye los servicios que tiene el hotel?",
                         "schema": {
                             "type": "boolean"
                         }
@@ -541,6 +669,208 @@
                     },
                     "404": {
                         "description": "Hotel no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/hoteles/{hotel}/habitaciones": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Obtener las habitaciones de un hotel",
+                "operationId": "b3516123c4fb7364d7cc0a2ea84497b9",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de habitaciones"
+                    }
+                }
+            }
+        },
+        "/api/hoteles/{hotel}/servicio/{servicio}": {
+            "post": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Asociar un servicio a un hotel",
+                "operationId": "963fb389ce39f64f9a338e62b5d66422",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "servicio",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Servicio asociado correctamente"
+                    },
+                    "400": {
+                        "description": "Error en la asociación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Desasociar un servicio de un hotel",
+                "operationId": "6af0b0f09c31ff3b14fc1c1f80d12d19",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "servicio",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Servicio desasociado correctamente"
+                    },
+                    "400": {
+                        "description": "Error en la desasociación"
+                    }
+                }
+            }
+        },
+        "/api/hoteles/{hotel}/servicios": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Obtener los servicios de un hotel",
+                "operationId": "a8630c5040b477906c77268779df6031",
+                "parameters": [
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de servicios"
+                    }
+                }
+            }
+        },
+        "/api/hoteles/cascada": {
+            "post": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Crear un hotel con habitaciones y servicios en cascada",
+                "operationId": "17edb63281737d625882c1bff985863a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Hotel Ejemplo"
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "example": "Calle Falsa 123"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "hotel@ejemplo.com"
+                                    },
+                                    "sitioWeb": {
+                                        "type": "string",
+                                        "example": "http://hotel-ejemplo.com"
+                                    },
+                                    "habitaciones": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "numero": {
+                                                    "type": "string",
+                                                    "example": "101"
+                                                },
+                                                "tipo": {
+                                                    "type": "string",
+                                                    "example": "Deluxe"
+                                                },
+                                                "precioNoche": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100.5
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "servicios": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "nombre": {
+                                                    "type": "string",
+                                                    "example": "WiFi"
+                                                },
+                                                "descripcion": {
+                                                    "type": "string",
+                                                    "example": "Internet de alta velocidad"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hotel creado con éxito junto con sus relaciones"
+                    },
+                    "400": {
+                        "description": "Error en los datos enviados"
                     }
                 }
             }

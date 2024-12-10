@@ -135,34 +135,91 @@ class HabitacionController extends Controller
         return response()->json($habitacion, 201);
     }
 
-    // public function bulkStore(BulkStoreRequest $request)
-    // {
+    
+    /**
+     * @OA\Post(
+     *     path="/api/habitaciones/bulk",
+     *     summary="Crear múltiples habitaciones en batch",
+     *     tags={"Habitación"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"habitaciones"},
+     *             @OA\Property(
+     *                 property="habitaciones",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="hotel_id", type="integer", description="ID del hotel al que pertenece la habitación"),
+     *                     @OA\Property(property="numero", type="string", description="Número de la habitación"),
+     *                     @OA\Property(property="tipo", type="string", description="Tipo de habitación (individual, doble, suite)"),
+     *                     @OA\Property(property="precioNoche", type="number", format="float", description="Precio por noche de la habitación")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Habitaciones creadas correctamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Habitaciones creadas correctamente"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="hotel_id", type="integer"),
+     *                     @OA\Property(property="numero", type="string"),
+     *                     @OA\Property(property="tipo", type="string"),
+     *                     @OA\Property(property="precioNoche", type="number", format="float")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request - Si los datos no son válidos o falta información",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Datos inválidos")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel no encontrado",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Hotel con ID {hotel_id} no encontrado")
+     *         )
+     *     )
+     * )
+     */
+    public function bulkStore(BulkStoreRequest $request)
+    {
 
-    //     // Se extraen los datos validados de las habitaciones
-    //     dd($request->all());  // Muestra los datos enviados en la solicitud
+        // Se extraen los datos validados de las habitaciones
+        // dd($request->all());  // Muestra los datos enviados en la solicitud
 
-    //     $habitacionesData = $request->validated()['habitaciones'];
+        $habitacionesData = $request->validated()['habitaciones'];
 
-    //     // Crear las habitaciones en batch
-    //     foreach ($habitacionesData as $habitacionData) {
-    //         $hotel = Hotel::find($habitacionData['hotel_id']);
+        // Crear las habitaciones en batch
+        foreach ($habitacionesData as $habitacionData) {
+            $hotel = Hotel::find($habitacionData['hotel_id']);
 
-    //         if (!$hotel) {
-    //             throw new HotelNotFoundException($habitacionData['hotel_id']);
-    //         }
+            if (!$hotel) {
+                throw new HotelNotFoundException($habitacionData['hotel_id']);
+            }
 
-    //         $habitacion = new Habitacion($habitacionData);
-    //         $habitacion->timestamps = false; // Evita la actualización automática de timestamps
-    //         $habitacion->created_at = now(); // Establece created_at manualmente
-    //         $habitacion->updated_at = null; // No modificamos updated_at en creación
-    //         $habitacion->save();
-    //     }
+            $habitacion = new Habitacion($habitacionData);
+            $habitacion->timestamps = false; // Evita la actualización automática de timestamps
+            $habitacion->created_at = now(); // Establece created_at manualmente
+            $habitacion->updated_at = null; // No modificamos updated_at en creación
+            $habitacion->save();
+        }
 
-    //     return response()->json([
-    //         'message' => 'Habitaciones creadas correctamente',
-    //         'data' => $habitacionesData
-    //     ], 201);
-    // }
+        return response()->json([
+            'message' => 'Habitaciones creadas correctamente',
+            'data' => $habitacionesData
+        ], 201);
+    }
 
 
 
