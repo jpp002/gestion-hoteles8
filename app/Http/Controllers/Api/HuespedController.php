@@ -263,12 +263,17 @@ public function index(Request $request)
         if (!$huesped ) {
             throw new HuespedNotFoundException($huesped);
         }
+        
         elseif (!$habitacion) {
             throw new HabitacionNotFoundException($habitacion);
         }
+        if ($huesped->habitacion()->exists()) {
+            return response()->json(['message' => "El huésped ya tiene una habitación reservada."], 400);
+        }
+        
 
         if (!$habitacion->isDisponible()) {
-            return response()->json(['message' => "La habitación no está disponible."], 400);
+            return response()->json(['message' => "La habitación no tiene huecos disponible."], 400);
         }
 
         $huesped->habitacion()->associate($habitacion)->save();
