@@ -13,6 +13,7 @@ use App\Models\Hotel;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /*
  * 
@@ -135,7 +136,7 @@ class HotelController extends Controller
      */
     public function all()
     {
-        return response()->json(Hotel::get());
+        return response()->json(["data" => Hotel::get()]);
     }
 
     /**
@@ -151,11 +152,19 @@ class HotelController extends Controller
     {
         $data = $request->validated();
 
-        // Crear el hotel manualmente
+        // Manejar la imagen si está presente
+        if ($request->hasFile('imagen')) {
+            // return $request->file('imagen');
+            $data['imagen'] = $request->file('imagen')->store('imagenes/hoteles', 'public');
+        }
+        else {
+            $data['imagen'] = 'storage/imagenes/hoteles/default.jpeg'; // Imagen por defecto
+        }
+
         $hotel = new Hotel($data);
-        $hotel->timestamps = false; 
-        $hotel->created_at = now(); 
-        $hotel->updated_at = null; 
+        $hotel->timestamps = false;
+        $hotel->created_at = now();
+        $hotel->updated_at = null;
         $hotel->save();
 
         return response()->json($hotel, 201);
@@ -229,10 +238,9 @@ class HotelController extends Controller
      *     @OA\Response(response=404, description="Hotel no encontrado")
      * )
      */
-    public function update(PutRequest $request,  $idHotel)
+    public function update(PutRequest $request, $idHotel)
     {
         $hotel = Hotel::find($idHotel);
-
 
         if (!$hotel) {
             throw new HotelNotFoundException($idHotel);
@@ -240,8 +248,18 @@ class HotelController extends Controller
 
         $data = $request->validated();
 
+        // Actualizar la imagen si está presente
+        if ($request->hasFile('imagen')) {
+            // Eliminar la imagen anterior si existe
+            if ($hotel->imagen) {
+                Storage::disk('public')->delete($hotel->imagen);
+            }
+            $data['imagen'] = $request->file('imagen')->store('imagenes/hoteles', 'public');
+        }
+
         $hotel->touch();
         $hotel->update($data);
+
         return response()->json($hotel);
     }
 
@@ -401,6 +419,7 @@ class HotelController extends Controller
      *             @OA\Property(property="telefono", type="string", example="123456789"),
      *             @OA\Property(property="email", type="string", example="hotel@ejemplo.com"),
      *             @OA\Property(property="sitioWeb", type="string", example="http://hotel-ejemplo.com"),
+     *             @OA\Property(property="imagen", type="string", format="binary", description="Imagen del hotel"),
      *             @OA\Property(
      *                 property="habitaciones",
      *                 type="array",
@@ -427,50 +446,52 @@ class HotelController extends Controller
      * )
      */
     
-    public function cascada(StoreCascadaRequest $request)
-    {
-        $data = $request->validated();
-
-        try {
-            DB::beginTransaction();
-
-            // Crear el hotel
-            $hotel = Hotel::create([
-                'nombre' => $data['nombre'],
-                'direccion' => $data['direccion'],
-                'telefono' => $data['telefono'],
-                'email' => $data['email'],
-                'sitioWeb' => $data['sitioWeb'] ?? null,
-            ]);
-            
-
-            // Crear habitaciones
-            if (isset($data['habitaciones'])) {
-                foreach ($data['habitaciones'] as $habitacionData) {
-                    $habitacion = new Habitacion($habitacionData);
-                    $hotel->habitaciones()->save($habitacion);
-                }
-            }
-
-            // Crear servicios
-            if (isset($data['servicios'])) {
-                foreach ($data['servicios'] as $servicioData) {
-                    $servicio = Servicio::firstOrCreate(
-                        ['nombre' => $servicioData['nombre']],
-                        ['descripcion' => $servicioData['descripcion'] ?? null]
-                    );
-                    $hotel->servicios()->attach($servicio->id);
-                }
-            }
-
-            DB::commit();
-            
-            $request2 = new \Illuminate\Http\Request();
-            $request2->merge(['includeHabitaciones' => 'true', 'includeServicios' => 'true']);
-            return $this->show($request2, $hotel->id);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['error' => 'Error al crear el hotel: ' . $e->getMessage()], 400);
-        }
-    }
+     public function cascada(StoreCascadaRequest $request)
+     {
+         $data = $request->validated();
+ 
+         try {
+             DB::beginTransaction();
+ 
+             // Manejar la imagen si está presente
+             if (isset($data['imagen']) && $request->hasFile('imagen')) {
+                 $data['imagen'] = $request->file('imagen')->store('imagenes/hoteles', 'public');
+             }
+ 
+             $hotel = Hotel::create([
+                 'nombre' => $data['nombre'],
+                 'direccion' => $data['direccion'],
+                 'telefono' => $data['telefono'],
+                 'email' => $data['email'],
+                 'sitioWeb' => $data['sitioWeb'] ?? null,
+                 'imagen' => $data['imagen'] ?? null
+             ]);
+ 
+             if (isset($data['habitaciones'])) {
+                 foreach ($data['habitaciones'] as $habitacionData) {
+                     $habitacion = new Habitacion($habitacionData);
+                     $hotel->habitaciones()->save($habitacion);
+                 }
+             }
+ 
+             if (isset($data['servicios'])) {
+                 foreach ($data['servicios'] as $servicioData) {
+                     $servicio = Servicio::firstOrCreate(
+                         ['nombre' => $servicioData['nombre']],
+                         ['descripcion' => $servicioData['descripcion'] ?? null]
+                     );
+                     $hotel->servicios()->attach($servicio->id);
+                 }
+             }
+ 
+             DB::commit();
+ 
+             $request2 = new \Illuminate\Http\Request();
+             $request2->merge(['includeHabitaciones' => 'true', 'includeServicios' => 'true']);
+             return $this->show($request2, $hotel->id);
+         } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['error' => 'Error al crear el hotel: ' . $e->getMessage()], 400);
+         }
+     }
 }

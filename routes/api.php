@@ -26,7 +26,7 @@ Route::post('user/login', [UserController::class, 'login']);
 
 
 // Rutas para Servicios
-Route::group(['prefix' => 'servicios', 'middleware' => ['auth:sanctum', 'ability:all']], function () {
+Route::group(['prefix' => 'servicios'/*, 'middleware' => ['auth:sanctum', 'ability:all']*/], function () {
     Route::get('/all', [ServicioController::class, 'all']);
     Route::get('/{servicio}/hoteles', [ServicioController::class, 'hoteles']);
 });

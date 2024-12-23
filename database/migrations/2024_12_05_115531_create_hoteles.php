@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('hoteles', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('direccion')->unique();;
-            $table->string('telefono')->unique();;
-            $table->string('email')->nullable()->unique();;
-            $table->string('sitioWeb')->nullable()->unique();;
+            $table->string('direccion')->unique();
+            $table->string('telefono')->unique();
+            $table->string('email')->nullable()->unique();
+            $table->string('sitioWeb')->nullable()->unique();
+            $table->string('imagen')->nullable(); // Campo para almacenar la imagen
             $table->timestamps();
         });
     }

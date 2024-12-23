@@ -12,7 +12,7 @@ class Hotel extends Model
 
     protected $table = 'hoteles';
 
-    protected $fillable = ['nombre', 'direccion', 'telefono', 'email', 'sitioWeb'];
+    protected $fillable = ['nombre', 'direccion', 'telefono', 'email', 'sitioWeb', 'imagen'];
 
     //Relaciones
     public function habitaciones()

@@ -822,6 +822,11 @@
                                         "type": "string",
                                         "example": "http://hotel-ejemplo.com"
                                     },
+                                    "imagen": {
+                                        "description": "Imagen del hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
                                     "habitaciones": {
                                         "type": "array",
                                         "items": {
@@ -1614,6 +1619,11 @@
                         "description": "Sitio web del hotel (mínimo 5 caracteres)",
                         "type": "string",
                         "minLength": 5
+                    },
+                    "imagen": {
+                        "description": "Imagen del hotel",
+                        "type": "string",
+                        "format": "binary"
                     }
                 },
                 "type": "object"
@@ -1656,6 +1666,11 @@
                         "description": "Sitio web del hotel (mínimo 5 caracteres)",
                         "type": "string",
                         "minLength": 5
+                    },
+                    "imagen": {
+                        "description": "Imagen del hotel",
+                        "type": "string",
+                        "format": "binary"
                     }
                 },
                 "type": "object"

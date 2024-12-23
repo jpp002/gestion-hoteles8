@@ -43,7 +43,8 @@ use Illuminate\Routing\Controller as BaseController;
  *     @OA\Property(property="direccion", type="string", description="Dirección del hotel (mínimo 5 caracteres, máximo 100)", minLength=5, maxLength=100),
  *     @OA\Property(property="telefono", type="string", description="Teléfono del hotel (máximo 20 caracteres)", maxLength=20),
  *     @OA\Property(property="email", type="string", format="email", description="Correo electrónico del hotel (mínimo 5 caracteres)", minLength=5),
- *     @OA\Property(property="sitioWeb", type="string", description="Sitio web del hotel (mínimo 5 caracteres)", minLength=5)
+ *     @OA\Property(property="sitioWeb", type="string", description="Sitio web del hotel (mínimo 5 caracteres)", minLength=5),
+ *     @OA\Property(property="imagen", type="string", format="binary", description="Imagen del hotel")
  * )
  * 
  * @OA\Schema(
@@ -56,7 +57,8 @@ use Illuminate\Routing\Controller as BaseController;
  *     @OA\Property(property="direccion", type="string", description="Dirección del hotel (mínimo 5 caracteres, máximo 100)", minLength=5, maxLength=100),
  *     @OA\Property(property="telefono", type="string", description="Teléfono del hotel (máximo 20 caracteres)", maxLength=20),
  *     @OA\Property(property="email", type="string", format="email", description="Correo electrónico del hotel (mínimo 5 caracteres)", minLength=5),
- *     @OA\Property(property="sitioWeb", type="string", description="Sitio web del hotel (mínimo 5 caracteres)", minLength=5)
+ *     @OA\Property(property="sitioWeb", type="string", description="Sitio web del hotel (mínimo 5 caracteres)", minLength=5),
+ *     @OA\Property(property="imagen", type="string", format="binary", description="Imagen del hotel")
  * )
  * 
  *  * @OA\Schema(
